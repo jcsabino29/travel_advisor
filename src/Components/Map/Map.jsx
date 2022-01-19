@@ -4,11 +4,11 @@ import { Paper, Typography, useMediaQuery } from '@material-ui/core';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import Rating from '@material-ui/lab/Rating';
 
-import useStyles from './styles';
+import useStyles from './styles.js';
 
 const Map = () => {
     const classes = useStyles();
-    const isMobile = useMediaQuery('(min-width: 600px)');
+    const matches = useMediaQuery('(min-width:600px)');
     const coordinates = { lat: 0, lng: 0 };
 
 
@@ -16,7 +16,7 @@ const Map = () => {
 
         <div className={classes.mapContainer}>
             <GoogleMapReact
-                bootstrapURLKeys={{ key: 'AIzaSyBzG_n-VYVO7fO4YSYARdcCyeEW3_kC_bc' }}
+                bootstrapURLKeys={{ key: api_key }}
                 defaultCenter={coordinates}
                 center={coordinates}
                 defaultZoom={14}
