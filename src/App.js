@@ -10,6 +10,9 @@ const App = () => {
     const [ places, setPlaces] = useState([]); //starts as list
     const [ coordinates, setCoordinates ] = useState({}); //starts as an empty object, passes this prop to maps
     const [ bounds, setBounds ] = useState({}); 
+    const [ childClick, setChildClick ] = useState({});
+
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(({coords: { latitude, longitude }}) => {
@@ -19,11 +22,12 @@ const App = () => {
 
     //.then is required for async functions, useEffect similar to componentDidMount and componentDidUpdate
     useEffect(() => {
-        console.log(bounds )
+        setIsLoading(true);
         getPlacesData(bounds.sw, bounds.ne)
             .then((data) => {
-                console.log(data);
+                //console.log(data);
                 setPlaces(data);
+                setIsLoading(false);
             })
     }, [coordinates, bounds]); // required to update values 
 
@@ -33,7 +37,7 @@ const App = () => {
             <Header />
             <Grid container spacing={3} style={{width: '100%'}}>
                 <Grid item xs={12} md={4}>
-                    <List places={places} />
+                    <List places={places} childClick={childClick} isLoading={isLoading} />
                 </Grid>
                 <Grid item xs={12} md={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Map 
@@ -41,6 +45,7 @@ const App = () => {
                         setBounds = {setBounds}
                         coordinates = {coordinates}
                         places={places}
+                        setChildClick={setChildClick}
                     />
                 </Grid>
             </Grid>
