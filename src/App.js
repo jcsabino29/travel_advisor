@@ -27,7 +27,7 @@ const App = () => {
         setIsLoading(true);
         getPlacesData(bounds.sw, bounds.ne, type, rating)
             .then((data) => {
-                console.log(data);
+                //console.log(data);
                 setPlaces(data);
                 setIsLoading(false);
             })
