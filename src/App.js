@@ -13,6 +13,7 @@ const App = () => {
     const [ childClick, setChildClick ] = useState({});
     const [type, setType] = useState('restaurants');
     const [rating, setRating] = useState('');
+    const [filteredPlaces, setFilteredPlaces] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -22,6 +23,12 @@ const App = () => {
         })
     }, []);
 
+    useEffect(() => {
+        const filteredPlaces = places.filter((place) => Number(place.rating) >= Number(rating));
+        //const temp_filteredPlaces = filteredPlaces.filter((place) => Number(place.num_reviews) >= Number(0))
+        setFilteredPlaces(filteredPlaces);
+    }, [rating]);
+
     //.then is required for async functions, useEffect similar to componentDidMount and componentDidUpdate
     useEffect(() => {
         setIsLoading(true);
@@ -29,6 +36,7 @@ const App = () => {
             .then((data) => {
                 //console.log(data);
                 setPlaces(data);
+                setFilteredPlaces([]);
                 setIsLoading(false);
             })
     }, [coordinates, bounds, type, rating]); // required to update values 
@@ -36,18 +44,25 @@ const App = () => {
     return(
         <>
             <CssBaseline />
-            <Header />
+            <Header setCoordinates={setCoordinates}/>
             <Grid container spacing={3} style={{width: '100%'}}>
                 <Grid item xs={12} md={4}>
-                    <List places={places} childClick={childClick} isLoading={isLoading} type={type} setType={setType}
-                    rating={rating} setRating={setRating} />
+                    <List 
+                        places={filteredPlaces.length ? filteredPlaces : places} 
+                        childClick={childClick} 
+                        isLoading={isLoading} 
+                        type={type} 
+                        setType={setType}
+                        rating={rating} 
+                        setRating={setRating} 
+                    />
                 </Grid>
                 <Grid item xs={12} md={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Map 
+                        places={filteredPlaces.length ? filteredPlaces : places} 
                         setCoordinates = {setCoordinates}
                         setBounds = {setBounds}
                         coordinates = {coordinates}
-                        places={places}
                         setChildClick={setChildClick}
                     />
                 </Grid>
